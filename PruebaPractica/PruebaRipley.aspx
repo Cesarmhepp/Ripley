@@ -70,10 +70,18 @@
 		</div>	
 	</div>
 	
-    <form runat="server">
-		<asp:Button ID="Button1" runat="server" Text="Button" OnClick="Button1_Click" />
-		<asp:GridView ID="GridView1" runat="server"></asp:GridView>
-    </form>
+	<div id="data2">
+      
+      <div id="info" class="col">
+		  
+
+      </div>
+      
+      <img id="image1" src="" alt="image1" class="img-fluid" />
+		<button id="btnLlamada" class="btn btn-primary">Presione Aqui</button>
+      
+    </div>
+   
 
 	
 </div>
@@ -179,8 +187,73 @@
 	</div>
 </div>
 
-	<script src="Scripts/js/jquery-3.2.1.slim.min.js"></script>
+	<script src="Scripts/js/jquery-3.5.1.min.js"></script>
     <script src="Scripts/js/popper.min.js"></script>
     <script src="Scripts/js/bootstrap.min.js"></script>
+	
+	<script>
+		$(function () {
+            $("#btnLlamada").click(function () {llamada() })
+			function llamada() {
+                var settings = {
+                    "url": "https://simple.ripley.cl/api/v2/products?format=json&partNumbers=2000379450763",
+                    "method": "GET",
+                    "timeout": 0,
+                    "headers": {
+                        "Cookie": "__cfduid=da331065b66ac66d555c7a7eb880d49231601508670; heroku-session-affinity=AECDaANoA24IAeO+Vpj///8HYgAHwv5iAAwjl2EGbAAAAANtAAAABXdlYi40bQAAAAV3ZWIuMm0AAAAFd2ViLjFqtrY1qE4Um2BlOgFTdP6E7faAWc0_"
+                    },
+                };
+
+                $.ajax(settings).done(function (response) {
+					console.log(response);
+					alert("Mostrando datos");
+                });
+
+				/* 
+				 PARA CORRER EL CODIGO, SE NECESITA DESACTIVAR CORS, ESTO SE REALIZA A TRAVEZ DE CMD Y EL SIGUIENTE COMIANDO:
+				C:\Program Files\Google\Chrome\Application\chrome.exe" --disable-web-security  --user-data-dir=~/chromeTemp
+
+				Ademas, para ordenar el arreglo de texto de la API, se uso Postman para comprobar los datos entregados por la API.
+
+				 */
+
+                $.getJSON("https://simple.ripley.cl/api/v2/products?format=json&partNumbers=2000379450763", function (result) {
+
+                    $("#info").remove()
+
+                  
+
+                    $("#data2").append('<div id="info"\
+                                  <table class="table table-dark"> \
+                                    <tr>  \
+                                      <th>NOMBRE</th>\
+                                      <th>ID</th>\
+                                      <th>PRECIO</th>\
+										<th>LISTA DE PRECIO</th>\
+										<th>CARDPRICE</th>\
+                                    </tr>\
+									</br>\
+									<tr>  \
+                                      <th>'+ result[0].name + '</th>\
+                                      <th>'+ result[0].uniqueID + '</th>\
+                                      <th>'+ result[0].prices["offerPrice"] + '</th>\
+										<th>'+ result[0].prices["listPrice"] + '</th>\
+										<th>'+ result[0].prices["cardPrice"] + '</th>\
+                                    </tr>\
+									\
+                                  </table>\
+                                  </div>');
+
+                    try {
+                        $("#image1").attr("src", result[0].fullImage );
+                    } catch (error) {
+                        $("#image1").attr("src", );
+                    }
+                });
+            }         
+		});    
+
+    </script>
+
 </body>
 </html>
